@@ -5,7 +5,7 @@ namespace DesafioProjetoHospedagem.Models
         public List<Pessoa> Hospedes { get; set; }
         public Suite Suite { get; set; }
         public int DiasReservados { get; set; }
-
+        private DateTime DataEntrada = DateTime.Now;
         public Reserva() { }
 
         public Reserva(int diasReservados)
@@ -15,16 +15,13 @@ namespace DesafioProjetoHospedagem.Models
 
         public void CadastrarHospedes(List<Pessoa> hospedes)
         {
-            // TODO: Verificar se a capacidade é maior ou igual ao número de hóspedes sendo recebido
-            // *IMPLEMENTE AQUI*
-            if (true)
+            if (Suite.Capacidade >= hospedes.Count)
             {
                 Hospedes = hospedes;
             }
             else
             {
-                // TODO: Retornar uma exception caso a capacidade seja menor que o número de hóspedes recebido
-                // *IMPLEMENTE AQUI*
+                throw new Exception("Capacidade da suíte é menor que o número de hóspedes.");
             }
         }
 
@@ -35,26 +32,48 @@ namespace DesafioProjetoHospedagem.Models
 
         public int ObterQuantidadeHospedes()
         {
-            // TODO: Retorna a quantidade de hóspedes (propriedade Hospedes)
-            // *IMPLEMENTE AQUI*
+            if (Hospedes != null)
+            {
+                return Hospedes.Count;
+            }
             return 0;
         }
 
         public decimal CalcularValorDiaria()
         {
-            // TODO: Retorna o valor da diária
             // Cálculo: DiasReservados X Suite.ValorDiaria
-            // *IMPLEMENTE AQUI*
-            decimal valor = 0;
-
-            // Regra: Caso os dias reservados forem maior ou igual a 10, conceder um desconto de 10%
-            // *IMPLEMENTE AQUI*
-            if (true)
+            decimal valor = DiasReservados * Suite.ValorDiaria;
+            // Se a quantidade de dias for maior ou igual a 10, aplicar 10% de desconto
+            if (DiasReservados >= 10)
             {
-                valor = 0;
+                valor *= 0.9m; // Aplicando 10% de desconto
             }
 
             return valor;
         }
+
+        public DateTime GetDataEntrada()
+        {
+            return DataEntrada;
+        }
+        public DateTime GetDataSaida()
+        {
+            return DataEntrada.AddDays(DiasReservados);
+        }
+        public void ListarHospedes()
+        {
+            if (Hospedes != null && Hospedes.Count > 0)
+            {
+                foreach (var hospede in Hospedes)
+                {
+                    Console.WriteLine($"Hóspede: {hospede.NomeCompleto}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Nenhum hóspede cadastrado.");
+            }
+        }
+
     }
 }
